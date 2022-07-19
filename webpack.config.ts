@@ -1,7 +1,10 @@
 import path from 'path'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
+const { ModuleFederationPlugin } = require('webpack').container;
+
 import { Configuration as WebpackConfiguration } from 'webpack'
 import { Configuration as DevServerConfiguration } from 'webpack-dev-server'
+import { dependencies as deps } from "./package.json";
 
 export default (_: never, { mode = 'development' }: IWebpackArgs): Configuration => {
   return {
@@ -52,6 +55,27 @@ export default (_: never, { mode = 'development' }: IWebpackArgs): Configuration
     },
 
     plugins: [
+      new ModuleFederationPlugin({
+        name: "hostApp",
+        filename: "remoteEntry.js",
+        remoteType: 'var',
+        remotes: {
+          search: "search",
+        },
+        shared: {
+          ...deps,
+          react: {
+            singleton: true,
+            eager: true,
+            requiredVersion: deps.react
+          },
+          "react-dom": {
+            singleton: true,
+            eager: true,
+            requiredVersion: deps["react-dom"]
+          },
+        },
+      }),
       new HtmlWebpackPlugin({
         title: 'User Table',
         template: 'public/index.html'

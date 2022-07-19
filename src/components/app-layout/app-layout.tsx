@@ -2,6 +2,7 @@ import React, { useMemo } from 'react'
 import { Layout, Menu } from 'antd'
 
 import { IAppLayoutProps } from './types'
+import MFSearch from 'search/MFSearch.tsx'
 
 import './app-layout.less'
 
@@ -17,6 +18,7 @@ export const AppLayout = ({ children, actions }: IAppLayoutProps) => {
     </Layout.Header>
     <Layout>
       <Layout.Sider className="app-layout-sider" width={350}>
+        <MFSearch />
         {/* Module Federation */}
       </Layout.Sider>
       <Layout.Content className="app-layout-content">
