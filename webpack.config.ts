@@ -56,23 +56,19 @@ export default (_: never, { mode = 'development' }: IWebpackArgs): Configuration
 
     plugins: [
       new ModuleFederationPlugin({
-        name: "hostApp",
-        filename: "remoteEntry.js",
-        remoteType: 'var',
+        name: 'host',
         remotes: {
-          search: "search",
+          remote: 'remote@http://localhost:3002/remoteEntry.js',
         },
         shared: {
           ...deps,
           react: {
             singleton: true,
-            eager: true,
-            requiredVersion: deps.react
+            requiredVersion: deps['react'],
           },
-          "react-dom": {
+          'react-dom': {
             singleton: true,
-            eager: true,
-            requiredVersion: deps["react-dom"]
+            requiredVersion: deps['react-dom'],
           },
         },
       }),
