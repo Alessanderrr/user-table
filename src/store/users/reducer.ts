@@ -2,12 +2,13 @@ import { createReducer } from '@reduxjs/toolkit'
 
 import { IUsersState } from './types'
 
-import { generate, createUser, updateUser, deleteUser } from './thunks'
+import { generate, createUser, updateUser, deleteUser, searchUsers } from './thunks'
 
 const initialState: IUsersState = {
   fetching: false,
   users: [],
-  errorMessage: ''
+  errorMessage: '',
+  search: ''
 }
 
 export const usersReducer = createReducer(initialState, builder =>
@@ -23,4 +24,5 @@ export const usersReducer = createReducer(initialState, builder =>
     .addCase(updateUser.rejected, (state, { payload }) => ({ ...state, fetching: false, errorMessage: payload.toString() }))
     .addCase(deleteUser.pending, (state, { payload }) => ({ ...state, fetching: true }))
     .addCase(deleteUser.fulfilled, (state, { payload }) => ({ ...state, fetching: false, users: state.users.filter(user => user.login.uuid !== payload) }))
-    .addCase(deleteUser.rejected, (state, { payload }) => ({ ...state, fetching: false, errorMessage: payload.toString() })))
+    .addCase(deleteUser.rejected, (state, { payload }) => ({ ...state, fetching: false, errorMessage: payload.toString() }))
+    .addCase(searchUsers.fulfilled, (state, { payload }) => ({ ...state, search: payload })))

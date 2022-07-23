@@ -1,7 +1,9 @@
 import React, { useMemo } from 'react'
 import { Layout, Menu } from 'antd'
 
+import { useAppDispatch } from '../../store';
 import { IAppLayoutProps } from './types'
+import { searchUsers } from '../../store/users/thunks';
 import MFSearch from 'remote/MFSearch';
 
 
@@ -11,9 +13,10 @@ export const AppLayout = ({ children, actions }: IAppLayoutProps) => {
   const items = useMemo(
     () => actions?.map(({ key, title, action }) => ({ key: key ?? title, label: title, onClick: () => { action() } })) ?? [],
     [ actions ])
+  const dispatch = useAppDispatch()
 
-  const onRemoteChange = (remoteResponse: string) => {
-    console.log('messageFromRemote', remoteResponse);
+  const onRemoteChange = (searchString: string) => {
+    dispatch(searchUsers(searchString))
   }
 
   return <Layout className="app-layout">

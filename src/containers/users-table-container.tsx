@@ -9,9 +9,17 @@ import { EditUserModalContainer } from './edit-user-modal-container'
 
 export const UsersTableContainer = () => {
   const users = useAppSelector(s => s.users.users)
+  const search = useAppSelector(s => s.users.search)
   const fetching = useAppSelector(s => s.users.fetching)
   const dispatch = useAppDispatch()
   const [editableUser, setEditableUser] = useState({} as IUser)
+
+  const filteredUsers = users.reduce((acc, current) => {
+    if (current.email.indexOf(search) >= 0) {
+      acc.push(current);
+    }
+    return acc
+  }, []);
 
   const handleEditButtonClick = (user: IUser) => {
     setEditableUser(user)
@@ -24,7 +32,7 @@ export const UsersTableContainer = () => {
   }
   return (
     <>
-      <UsersTable loading={fetching} users={users} handleEditButtonClick={handleEditButtonClick} handleDeleteButtonClick={handleDeleteButtonClick} />
+      <UsersTable loading={fetching} users={filteredUsers} handleEditButtonClick={handleEditButtonClick} handleDeleteButtonClick={handleDeleteButtonClick} />
       {
         editableUser.email && (
           <EditUserModalContainer editableUser={editableUser} handleCloseModal={handleCloseModal} />

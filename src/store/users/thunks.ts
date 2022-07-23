@@ -33,3 +33,8 @@ export const deleteUser = createAsyncThunk(
     return userData.login.uuid
   }
 )
+
+export const searchUsers = createAsyncThunk(
+  'users.search',
+  (search: string) => search
+)
